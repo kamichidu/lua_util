@@ -13,5 +13,8 @@
 
 include/
 lib/
-.project
+.vimprojects
+tags
+*.t
+compile.sh
 

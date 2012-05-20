@@ -14,7 +14,7 @@ class lua{
 	public:
 		template<int N, class R, class... T>
 			function<N, R, T...> define_function(std::string const& func_name);
-	public:
+	private:
 		static int at_panic(lua_State* lua);
 	private:
 		lua_State* _lua;
