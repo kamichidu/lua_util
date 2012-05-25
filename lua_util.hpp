@@ -2,7 +2,6 @@
 #define LUA_UTIL_LUA_HPP_
 
 #include "lua_util/type.hpp"
-#include "lua_util/function.hpp"
 #include "lua_util/exception.hpp"
 
 namespace lua_util{
@@ -12,8 +11,7 @@ class lua{
 		lua();
 		~lua();
 	public:
-		template<int N, class R, class... T>
-			function<N, R, T...> define_function(std::string const& func_name);
+		operator lua_State* () const;
 	private:
 		static int at_panic(lua_State* lua);
 	private:
@@ -35,9 +33,8 @@ lua::~lua(){
 	_lua= nullptr;
 }
 
-template<int N, class R, class... T>
-function<N, R, T...> lua::define_function(std::string const& func_name){
-	return function<N, R, T...>(_lua, func_name);
+lua::operator lua_State* () const{
+	return _lua;
 }
 
 int lua::at_panic(lua_State* lua){

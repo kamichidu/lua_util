@@ -32,6 +32,10 @@ class function<R(ArgTypes...)>{
 			void push_args(nil_t const& arg, Rest const&... rests) const;
 		void push_args() const;
 	private:
+		void pop_return_value(number_t& dest) const;
+		void pop_return_value(string_t& dest) const;
+		void pop_return_value(boolean_t& dest) const;
+	private:
 		lua_State*       _lua;
 		std::string      _func_name;
 };
@@ -72,8 +76,11 @@ R function<R(ArgTypes...)>::operator () (ArgTypes const&... args) const{
 			break;
 	}
 
-	// TODO: 返り値について一考
-	return 0;
+	R ret;
+
+	pop_return_value(ret);
+
+	return ret;
 }
 
 template<class R, class...ArgTypes>
@@ -107,6 +114,24 @@ void function<R(ArgTypes...)>::push_args(nil_t const& arg, Rest const&... rests)
 template<class R, class...ArgTypes>
 inline
 void function<R(ArgTypes...)>::push_args() const{}
+
+template<class R, class...ArgTypes>
+inline
+void function<R(ArgTypes...)>::pop_return_value(number_t& dest) const{
+	dest= lua_tonumber(_lua, -1);
+}
+
+template<class R, class...ArgTypes>
+inline
+void function<R(ArgTypes...)>::pop_return_value(string_t& dest) const{
+	dest= lua_tostring(_lua, -1);
+}
+
+template<class R, class...ArgTypes>
+inline
+void function<R(ArgTypes...)>::pop_return_value(boolean_t& dest) const{
+	dest= lua_toboolean(_lua, -1);
+}
 
 }
 

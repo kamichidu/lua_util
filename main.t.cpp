@@ -1,11 +1,12 @@
 #include <lua_util.hpp>
 #include <iostream>
+#include <lua_util/function.hpp>
 
 int main(int argc, char* argv[]){
 	lua_util::lua lua;
 
-	auto print= lua.define_function<0, int, lua_util::type::string_t>("print");
-	auto abs=   lua.define_function<1, lua_util::type::number_t, lua_util::type::number_t>("math.abs");
+	auto const print= lua_util::function<lua_util::type::number_t(lua_util::type::string_t)>(lua, "print");
+	auto const abs=   lua_util::function<lua_util::type::number_t(lua_util::type::number_t)>(lua, "math.abs");
 
 	print("hello?");
 	std::cout << abs(-30.5) << std::endl;
